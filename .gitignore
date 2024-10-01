@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/AppDev-Round1/ConsoleApp1
+/AppDev-Round1/AppDev-Round1/bin/Debug/net8.0-windows
+/AppDev-Round1/JSON Deserializer Class/obj/Debug/net8.0/JSON Deserializer Class.AssemblyInfo.cs
+/AppDev-Round1/JSON Deserializer Class/obj/Debug/net8.0/JSON Deserializer Class.AssemblyInfoInputs.cache
+/AppDev-Round1/JSON Deserializer Class/obj/JSON Deserializer Class.csproj.nuget.dgspec.json
+/AppDev-Round1/JSON Deserializer Class/obj/project.assets.json
+/AppDev-Round1/JSON Deserializer Class/obj/project.nuget.cache
