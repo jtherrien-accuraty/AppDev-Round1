@@ -9,5 +9,7 @@
 /AppDev-Round1/JSON Deserializer Class/obj/JSON Deserializer Class.csproj.nuget.dgspec.json
 /AppDev-Round1/JSON Deserializer Class/obj/project.assets.json
 /AppDev-Round1/JSON Deserializer Class/obj/project.nuget.cache
-/.vs/
-/[Bb]in/
+.vs/
+[Bb]in/
+AppDev-Round1/.vs
+AppDev-Round1/obj
