@@ -10,6 +10,7 @@ namespace AppDev_Round1
 {
     public partial class Form1 : Form
     {
+        //Class Variables
         private string _fileContents = string.Empty;
         private List<DeserializerTemplate>? _json;
         private Dictionary<string, Dictionary<string, Training>> _processedTrainings;
@@ -26,6 +27,11 @@ namespace AppDev_Round1
             fiscalYear.Text = DateTime.Now.Year.ToString(); 
         }
 
+        /// <summary>
+        /// OnClick handler for open file button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openFile_Click(object sender, EventArgs e)
         {
             if (openJSONFile.ShowDialog() == DialogResult.OK)
@@ -33,6 +39,7 @@ namespace AppDev_Round1
                 initializeForm();
             }
         }
+
         /// <summary>
         /// Resets form and processes selected JSON file
         /// </summary>
@@ -44,7 +51,6 @@ namespace AppDev_Round1
             }
             trainings.Items.Clear();
             trainings.Enabled = false;
-            //jsonPreview.Text = string.Empty;
             outputPreview.Text = string.Empty;
             outputType.Text = string.Empty;
             outputType.Enabled = true;
@@ -55,10 +61,8 @@ namespace AppDev_Round1
             expiredTrainingLbl.Enabled = false;
             fiscalYear.Enabled = false;
             fiscalYearLbl.Enabled = false;
-
             updateTrainingList();
         }
-
 
         /// <summary>
         /// Deserializes select JSON file and sets JSON File Preview to file contents
@@ -109,12 +113,16 @@ namespace AppDev_Round1
             }
             catch (Exception ex)
             {
+                //Error processing JSON
                 jsonPreview.Text = $"Error Parsing JSON, please select file with valid JSON. Error: {ex}";
                 return false;
             }
             return true;
         }
 
+        /// <summary>
+        /// Updates the form's list of trainings
+        /// </summary>
         private void updateTrainingList()
         {
             trainings.Items.Clear();
@@ -129,11 +137,11 @@ namespace AppDev_Round1
             _trainings = uniqueTrainings.ToList();
         }
 
-        private void openJSONFile_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// OnClick handler for save JSON button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveJSON_Click(object sender, EventArgs e)
         {
             if (saveJSONFile.ShowDialog() == DialogResult.OK)
@@ -147,15 +155,14 @@ namespace AppDev_Round1
         /// </summary>
         private void SaveOutput()
         {
-            //outputPreview.Text = "Save Output Clicked";
             File.WriteAllText(saveJSONFile.FileName, outputPreview.Text);
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Determines what type of report was selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void outputType_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateOutput.Enabled = true;
@@ -178,6 +185,9 @@ namespace AppDev_Round1
 
         }
 
+        /// <summary>
+        /// Reinitializes the form when completed trainings option is selected
+        /// </summary>
         private void CompletedTrainingsSelected()
         {
             trainings.Enabled = false;
@@ -191,6 +201,9 @@ namespace AppDev_Round1
             saveJSONFile.FileName = "CompletedTrainings";
         }
 
+        /// <summary>
+        /// Reinitializes the form when training reports option is selected
+        /// </summary>
         private void TrainingReportsSelected()
         {
             trainings.Enabled = true;
@@ -204,6 +217,9 @@ namespace AppDev_Round1
             saveJSONFile.FileName = "TrainingReports";
         }
 
+        /// <summary>
+        /// Reinitializes the form when expired trainings option is selected
+        /// </summary>
         private void ExpiredTrainingsSelected()
         {
             trainings.Enabled = false;
@@ -217,10 +233,11 @@ namespace AppDev_Round1
             saveJSONFile.FileName = "ExpiredTrainings";
         }
 
+        /// <summary>
+        /// Generates the output for completed trainings option
+        /// </summary>
         private void ProcessCompletedTrainings()
         {
-
-            //outputPreview.Text = "Process Completed Trainings Selected";
             Dictionary<string, int> results = new Dictionary<string, int>();
             //Loop through each unique training id, and count how many people have completed it
             foreach (var trainingStr in _trainings)
@@ -235,9 +252,11 @@ namespace AppDev_Round1
             outputPreview.Text = JsonSerializer.Serialize(results);
         }
 
+        /// <summary>
+        /// Generates the output for training reports option
+        /// </summary>
         private void ProcessTrainingReports()
         {
-            //outputPreview.Text = "Process Training Reports Selected";
             Dictionary<string, List<string>>  results = new Dictionary<string, List<string>>();
             DateTime startDate = new DateTime(int.Parse(fiscalYear.Text) - 1, 7, 1);
             DateTime endDate = new DateTime(int.Parse(fiscalYear.Text), 6, 30);
@@ -263,6 +282,9 @@ namespace AppDev_Round1
 
         }
 
+        /// <summary>
+        /// Generates the output for expired trainings option
+        /// </summary>
         private void ProcessExpiredTrainings()
         {
             Dictionary<string, Dictionary<string, string>> results = new Dictionary<string, Dictionary<string, string>>();
@@ -275,7 +297,6 @@ namespace AppDev_Round1
                         && DateTime.Parse(x.Value[trainingStr].expires) < expiredTraining.Value.AddMonths(1)
                     )
                 ;
-                //results.Add(trainingStr, new List<string>());
                 foreach (var user in users)
                 {
                     //if user is not already in dictionary add them
@@ -301,9 +322,15 @@ namespace AppDev_Round1
                     }
                 }
             }
+            //Save generated output to output preview
             outputPreview.Text = JsonSerializer.Serialize(results);
         }
 
+        /// <summary>
+        /// OnClick handler for update output button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void updateOutput_Click(object sender, EventArgs e)
         {
             switch (outputType.SelectedItem)
@@ -323,7 +350,5 @@ namespace AppDev_Round1
             }
             saveJSON.Enabled = true;
         }
-
-
     }
 }
