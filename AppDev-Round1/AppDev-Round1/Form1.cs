@@ -147,7 +147,8 @@ namespace AppDev_Round1
         /// </summary>
         private void SaveOutput()
         {
-            outputPreview.Text = "Save Output Clicked";
+            //outputPreview.Text = "Save Output Clicked";
+            File.WriteAllText(saveJSONFile.FileName, outputPreview.Text);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -187,6 +188,7 @@ namespace AppDev_Round1
             expiredTrainingLbl.Enabled = false;
             outputPreview.Text = string.Empty;
             saveJSON.Enabled = false;
+            saveJSONFile.FileName = "CompletedTrainings";
         }
 
         private void TrainingReportsSelected()
@@ -199,6 +201,7 @@ namespace AppDev_Round1
             expiredTrainingLbl.Enabled = false;
             outputPreview.Text = string.Empty;
             saveJSON.Enabled = false;
+            saveJSONFile.FileName = "TrainingReports";
         }
 
         private void ExpiredTrainingsSelected()
@@ -211,6 +214,7 @@ namespace AppDev_Round1
             expiredTrainingLbl.Enabled = true;
             outputPreview.Text = string.Empty;
             saveJSON.Enabled = false;
+            saveJSONFile.FileName = "ExpiredTrainings";
         }
 
         private void ProcessCompletedTrainings()
