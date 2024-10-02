@@ -41,10 +41,10 @@
             trainingsLbl = new Label();
             expiredTraining = new DateTimePicker();
             expiredTrainingLbl = new Label();
-            fiscalYear = new ComboBox();
             fiscalYearLbl = new Label();
             saveJSONFile = new SaveFileDialog();
             updateOutput = new Button();
+            fiscalYear = new ComboBox();
             SuspendLayout();
             // 
             // jsonPreview
@@ -173,15 +173,6 @@
             expiredTrainingLbl.TabIndex = 10;
             expiredTrainingLbl.Text = "Find Expired Trainings";
             // 
-            // fiscalYear
-            // 
-            fiscalYear.Enabled = false;
-            fiscalYear.FormattingEnabled = true;
-            fiscalYear.Location = new Point(117, 821);
-            fiscalYear.Name = "fiscalYear";
-            fiscalYear.Size = new Size(302, 49);
-            fiscalYear.TabIndex = 11;
-            // 
             // fiscalYearLbl
             // 
             fiscalYearLbl.AutoSize = true;
@@ -208,6 +199,15 @@
             updateOutput.Text = "Update Output";
             updateOutput.UseVisualStyleBackColor = true;
             updateOutput.Click += updateOutput_Click;
+            // 
+            // fiscalYear
+            // 
+            fiscalYear.Enabled = false;
+            fiscalYear.FormattingEnabled = true;
+            fiscalYear.Location = new Point(117, 821);
+            fiscalYear.Name = "fiscalYear";
+            fiscalYear.Size = new Size(302, 49);
+            fiscalYear.TabIndex = 11;
             // 
             // Form1
             // 
@@ -250,9 +250,9 @@
         private Label trainingsLbl;
         private DateTimePicker expiredTraining;
         private Label expiredTrainingLbl;
-        private ComboBox fiscalYear;
         private Label fiscalYearLbl;
         private SaveFileDialog saveJSONFile;
         private Button updateOutput;
+        private ComboBox fiscalYear;
     }
 }

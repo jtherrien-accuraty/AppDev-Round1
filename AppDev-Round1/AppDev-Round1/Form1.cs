@@ -19,6 +19,11 @@ namespace AppDev_Round1
             InitializeComponent();
             _processedTrainings = new Dictionary<string, Dictionary<string, Training>>();
             _trainings = new List<string>();
+            for(int idx = DateTime.Now.Year; idx >= 2000; idx--) 
+            {
+                fiscalYear.Items.Add(idx);
+            }
+            fiscalYear.Text = DateTime.Now.Year.ToString(); 
         }
 
         private void openFile_Click(object sender, EventArgs e)
@@ -33,7 +38,7 @@ namespace AppDev_Round1
         /// </summary>
         private void initializeForm()
         {
-            if(!processJson())
+            if (!processJson())
             {
                 return;
             }
@@ -50,6 +55,7 @@ namespace AppDev_Round1
             expiredTrainingLbl.Enabled = false;
             fiscalYear.Enabled = false;
             fiscalYearLbl.Enabled = false;
+
             updateTrainingList();
         }
 
@@ -71,7 +77,7 @@ namespace AppDev_Round1
 
                 //convert deserialized json into a dictionary using user names as keys and eliminate duplicate trainings 
                 _processedTrainings.Clear();
-                foreach(var record in _json)
+                foreach (var record in _json)
                 {
                     if (!_processedTrainings.ContainsKey(record.name))
                     {
@@ -80,13 +86,13 @@ namespace AppDev_Round1
                     }
                     //Loop through each training and add if not yet in dictionary, and replace with most recent if so,
                     //  and add to _trainings.
-                    foreach(var training in record.completions)
+                    foreach (var training in record.completions)
                     {
                         //dictionary processing
                         if (_processedTrainings[record.name].ContainsKey(training.name))
                         {
                             //Training already added, replace if current is more recent
-                            if (DateTime.Parse(training.timestamp) > DateTime.Parse( _processedTrainings[record.name][training.name].timestamp) )
+                            if (DateTime.Parse(training.timestamp) > DateTime.Parse(_processedTrainings[record.name][training.name].timestamp))
                             {
                                 _processedTrainings[record.name][training.name] = training;
                             }
@@ -101,7 +107,7 @@ namespace AppDev_Round1
                     }
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 jsonPreview.Text = $"Error Parsing JSON, please select file with valid JSON. Error: {ex}";
                 return false;
@@ -116,7 +122,7 @@ namespace AppDev_Round1
                 .OrderBy(x => x)
                 .Distinct()
             ;
-            foreach( var training in uniqueTrainings )
+            foreach (var training in uniqueTrainings)
             {
                 trainings.Items.Add(training);
             }
@@ -155,7 +161,7 @@ namespace AppDev_Round1
             switch (outputType.SelectedItem)
             {
                 case "Completed Trainings":
-                    
+
                     CompletedTrainingsSelected();
                     break;
                 case "Training Reports":
@@ -211,23 +217,46 @@ namespace AppDev_Round1
         {
 
             //outputPreview.Text = "Process Completed Trainings Selected";
-            Dictionary<string, int> results = new Dictionary<string, int>(); 
+            Dictionary<string, int> results = new Dictionary<string, int>();
             //Loop through each unique training id, and count how many people have completed it
-            foreach(var trainingStr in _trainings)
+            foreach (var trainingStr in _trainings)
             {
                 int count = _processedTrainings
                     .Where(x => x.Value.Any(y => y.Key == trainingStr))
                     .Count()
                 ;
                 results.Add(trainingStr, count);
-                
+
             }
             outputPreview.Text = JsonSerializer.Serialize(results);
         }
 
         private void ProcessTrainingReports()
         {
-            outputPreview.Text = "Process Training Reports Selected";
+            //outputPreview.Text = "Process Training Reports Selected";
+            Dictionary<string, List<string>>  results = new Dictionary<string, List<string>>();
+            DateTime startDate = new DateTime(int.Parse(fiscalYear.Text) - 1, 7, 1);
+            DateTime endDate = new DateTime(int.Parse(fiscalYear.Text), 6, 30);
+            foreach (string training in trainings.CheckedItems)
+            {
+                results.Add(training, new List<string>());
+            }
+            foreach(var res in results)
+            {
+                var users = _processedTrainings
+                    .Where(x =>
+                        x.Value.ContainsKey(res.Key)
+                        && DateTime.Parse(x.Value[res.Key].timestamp) >= startDate
+                        && DateTime.Parse(x.Value[res.Key].timestamp) <= endDate
+                    )
+                ;
+                foreach (var user in users)
+                {
+                    res.Value.Add(user.Key);
+                }
+            }
+            outputPreview.Text = JsonSerializer.Serialize(results);
+
         }
 
         private void ProcessExpiredTrainings()
@@ -236,14 +265,14 @@ namespace AppDev_Round1
             foreach (var trainingStr in _trainings)
             {
                 var users = _processedTrainings
-                    .Where(x => 
+                    .Where(x =>
                         x.Value.ContainsKey(trainingStr)
-                        && x.Value[trainingStr].expires != null 
+                        && x.Value[trainingStr].expires != null
                         && DateTime.Parse(x.Value[trainingStr].expires) < expiredTraining.Value.AddMonths(1)
                     )
                 ;
                 //results.Add(trainingStr, new List<string>());
-                foreach(var user in users)
+                foreach (var user in users)
                 {
                     //if user is not already in dictionary add them
                     if (!results.ContainsKey(user.Key))
@@ -255,8 +284,8 @@ namespace AppDev_Round1
                     if (!results[user.Key].ContainsKey(trainingStr))
                     {
                         string exp = string.Empty;
-                            
-                        if ( DateTime.Parse(user.Value[trainingStr].expires) < expiredTraining.Value)
+
+                        if (DateTime.Parse(user.Value[trainingStr].expires) < expiredTraining.Value)
                         {
                             exp = "expired";
                         }
@@ -290,5 +319,7 @@ namespace AppDev_Round1
             }
             saveJSON.Enabled = true;
         }
+
+
     }
 }
