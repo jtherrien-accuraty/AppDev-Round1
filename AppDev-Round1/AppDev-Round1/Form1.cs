@@ -179,6 +179,8 @@ namespace AppDev_Round1
             fiscalYearLbl.Enabled = false;
             expiredTraining.Enabled = false;
             expiredTrainingLbl.Enabled = false;
+            outputPreview.Text = string.Empty;
+            saveJSON.Enabled = false;
         }
 
         private void TrainingReportsSelected()
@@ -189,6 +191,8 @@ namespace AppDev_Round1
             fiscalYearLbl.Enabled = true;
             expiredTraining.Enabled = false;
             expiredTrainingLbl.Enabled = false;
+            outputPreview.Text = string.Empty;
+            saveJSON.Enabled = false;
         }
 
         private void ExpiredTrainingsSelected()
@@ -199,12 +203,26 @@ namespace AppDev_Round1
             fiscalYearLbl.Enabled = false;
             expiredTraining.Enabled = true;
             expiredTrainingLbl.Enabled = true;
+            outputPreview.Text = string.Empty;
+            saveJSON.Enabled = false;
         }
 
         private void ProcessCompletedTrainings()
         {
 
-            outputPreview.Text = "Process Completed Trainings Selected";
+            //outputPreview.Text = "Process Completed Trainings Selected";
+            Dictionary<string, int> results = new Dictionary<string, int>(); 
+            //Loop through each unique training id, and count how many people have completed it
+            foreach(var trainingStr in _trainings)
+            {
+                int count = _processedTrainings
+                    .Where(x => x.Value.Any(y => y.Key == trainingStr))
+                    .Count()
+                ;
+                results.Add(trainingStr, count);
+                
+            }
+            outputPreview.Text = JsonSerializer.Serialize(results);
         }
 
         private void ProcessTrainingReports()
