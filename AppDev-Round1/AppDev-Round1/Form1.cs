@@ -1,10 +1,16 @@
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using JSON_Deserializer_Class;
+using System.IO;
+using System.Text.Json;
+using System.Collections;
+
 
 namespace AppDev_Round1
 {
     public partial class Form1 : Form
     {
-        private string fileContents = string.Empty;
+        private string _fileContents = string.Empty;
+        private List<DeserializerTemplate>? _json;
         public Form1()
         {
             InitializeComponent();
@@ -22,10 +28,13 @@ namespace AppDev_Round1
         /// </summary>
         private void initializeForm()
         {
-
+            if(!processJson())
+            {
+                return;
+            }
             trainings.Items.Clear();
             trainings.Enabled = false;
-            jsonPreview.Text = string.Empty;
+            //jsonPreview.Text = string.Empty;
             outputPreview.Text = string.Empty;
             outputType.Text = string.Empty;
             outputType.Enabled = true;
@@ -36,16 +45,29 @@ namespace AppDev_Round1
             expiredTrainingLbl.Enabled = false;
             fiscalYear.Enabled = false;
             fiscalYearLbl.Enabled = false;
-            processJson();
         }
 
 
         /// <summary>
         /// Deserializes select JSON file and sets JSON File Preview to file contents
         /// </summary>
-        private void processJson()
+        /// <returns>true if successfully process JSON, else false</returns>
+        private bool processJson()
         {
-            jsonPreview.Text += "Process JSON Function Called\r\n";
+            try
+            {
+                //open file and read contents
+                _fileContents = File.ReadAllText(openJSONFile.FileName);
+                jsonPreview.Text = _fileContents;
+                //parse JSON
+                _json = JsonSerializer.Deserialize<List<DeserializerTemplate>>(_fileContents);
+            }
+            catch (Exception ex) 
+            {
+                jsonPreview.Text = $"Error Parsing JSON, please select file with valid JSON. Error: {ex}";
+                return false;
+            }
+            return true;
         }
 
         private void openJSONFile_FileOk(object sender, System.ComponentModel.CancelEventArgs e)

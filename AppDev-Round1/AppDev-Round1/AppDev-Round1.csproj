@@ -14,4 +14,8 @@
     <PackageReference Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JSON Deserializer Class\JSON Deserializer Class.csproj" />
+  </ItemGroup>
+
 </Project>
