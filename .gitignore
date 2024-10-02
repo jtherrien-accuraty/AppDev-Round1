@@ -29,3 +29,9 @@ AppDev-Round1/obj
 /AppDev-Round1/.vs/AppDev-Round1/v17/.suo
 /AppDev-Round1/.vs/AppDev-Round1/v17/DocumentLayout.backup.json
 /AppDev-Round1/.vs/AppDev-Round1/v17/DocumentLayout.json
+*.dll
+/AppDev-Round1/JSON Deserializer Class/obj/Debug/net8.0/JSON Deserializer Class.csproj.BuildWithSkipAnalyzers
+/AppDev-Round1/JSON Deserializer Class/obj/Debug/net8.0/JSON Deserializer Class.csproj.CoreCompileInputs.cache
+/AppDev-Round1/JSON Deserializer Class/obj/Debug/net8.0/JSON Deserializer Class.csproj.FileListAbsolute.txt
+/AppDev-Round1/JSON Deserializer Class/obj/Debug/net8.0/JSON Deserializer Class.pdb
+/AppDev-Round1/JSON Deserializer Class/obj/Debug/net8.0/JSON Deserializer Class.sourcelink.json
