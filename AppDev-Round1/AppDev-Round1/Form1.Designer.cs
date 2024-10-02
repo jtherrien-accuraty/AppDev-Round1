@@ -44,7 +44,7 @@
             fiscalYear = new ComboBox();
             fiscalYearLbl = new Label();
             saveJSONFile = new SaveFileDialog();
-            button1 = new Button();
+            updateOutput = new Button();
             SuspendLayout();
             // 
             // jsonPreview
@@ -60,7 +60,7 @@
             // openJSONFile
             // 
             openJSONFile.FileName = "Path\\To\\JSON.txt";
-            openJSONFile.Filter = "JSON TXT|*.txt,*.json,*.Json";
+            openJSONFile.Filter = "JSON TXT|*.txt;*.json;*.Json";
             openJSONFile.InitialDirectory = "C:\\";
             openJSONFile.FileOk += openJSONFile_FileOk;
             // 
@@ -195,24 +195,25 @@
             // 
             saveJSONFile.DefaultExt = "Json";
             saveJSONFile.Filter = "JSON|*.Json";
-            saveJSONFile.InitialDirectory = "C:\\";
+            saveJSONFile.InitialDirectory = "%USERPROFILE%\\Desktop";
             // 
-            // button1
+            // updateOutput
             // 
-            button1.Enabled = false;
-            button1.Location = new Point(34, 141);
-            button1.Name = "button1";
-            button1.Size = new Size(351, 58);
-            button1.TabIndex = 13;
-            button1.Text = "Update Output";
-            button1.UseVisualStyleBackColor = true;
+            updateOutput.Enabled = false;
+            updateOutput.Location = new Point(34, 141);
+            updateOutput.Name = "updateOutput";
+            updateOutput.Size = new Size(351, 58);
+            updateOutput.TabIndex = 13;
+            updateOutput.Text = "Update Output";
+            updateOutput.UseVisualStyleBackColor = true;
+            updateOutput.Click += updateOutput_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1575, 1029);
-            Controls.Add(button1);
+            Controls.Add(updateOutput);
             Controls.Add(fiscalYearLbl);
             Controls.Add(fiscalYear);
             Controls.Add(expiredTrainingLbl);
@@ -251,6 +252,6 @@
         private ComboBox fiscalYear;
         private Label fiscalYearLbl;
         private SaveFileDialog saveJSONFile;
-        private Button button1;
+        private Button updateOutput;
     }
 }
