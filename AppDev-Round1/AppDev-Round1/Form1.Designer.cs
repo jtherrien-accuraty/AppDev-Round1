@@ -138,16 +138,17 @@
             // 
             trainings.Enabled = false;
             trainings.FormattingEnabled = true;
-            trainings.Location = new Point(535, 112);
+            trainings.HorizontalScrollbar = true;
+            trainings.Location = new Point(441, 112);
             trainings.Name = "trainings";
-            trainings.Size = new Size(351, 752);
+            trainings.Size = new Size(456, 752);
             trainings.TabIndex = 7;
             // 
             // trainingsLbl
             // 
             trainingsLbl.AutoSize = true;
             trainingsLbl.Enabled = false;
-            trainingsLbl.Location = new Point(535, 53);
+            trainingsLbl.Location = new Point(441, 53);
             trainingsLbl.Name = "trainingsLbl";
             trainingsLbl.Size = new Size(260, 41);
             trainingsLbl.TabIndex = 8;
