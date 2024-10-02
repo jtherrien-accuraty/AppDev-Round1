@@ -62,7 +62,6 @@
             openJSONFile.FileName = "Path\\To\\JSON.txt";
             openJSONFile.Filter = "JSON TXT|*.txt;*.json;*.Json";
             openJSONFile.InitialDirectory = "C:\\";
-            openJSONFile.FileOk += openJSONFile_FileOk;
             // 
             // openFile
             // 
@@ -122,7 +121,6 @@
             outputPreview.ScrollBars = ScrollBars.Both;
             outputPreview.Size = new Size(580, 327);
             outputPreview.TabIndex = 4;
-            outputPreview.TextChanged += textBox1_TextChanged;
             // 
             // outputTypeLbl
             // 
