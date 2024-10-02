@@ -3,6 +3,7 @@ using JSON_Deserializer_Class;
 using System.IO;
 using System.Text.Json;
 using System.Collections;
+using System.Linq;
 
 
 namespace AppDev_Round1
@@ -11,9 +12,13 @@ namespace AppDev_Round1
     {
         private string _fileContents = string.Empty;
         private List<DeserializerTemplate>? _json;
+        private Dictionary<string, Dictionary<string, Training>> _processedTrainings;
+        private List<string> _trainings;
         public Form1()
         {
             InitializeComponent();
+            _processedTrainings = new Dictionary<string, Dictionary<string, Training>>();
+            _trainings = new List<string>();
         }
 
         private void openFile_Click(object sender, EventArgs e)
@@ -45,6 +50,7 @@ namespace AppDev_Round1
             expiredTrainingLbl.Enabled = false;
             fiscalYear.Enabled = false;
             fiscalYearLbl.Enabled = false;
+            updateTrainingList();
         }
 
 
@@ -59,8 +65,41 @@ namespace AppDev_Round1
                 //open file and read contents
                 _fileContents = File.ReadAllText(openJSONFile.FileName);
                 jsonPreview.Text = _fileContents;
+
                 //parse JSON
                 _json = JsonSerializer.Deserialize<List<DeserializerTemplate>>(_fileContents);
+
+                //convert deserialized json into a dictionary using user names as keys and eliminate duplicate trainings 
+                _processedTrainings.Clear();
+                foreach(var record in _json)
+                {
+                    if (!_processedTrainings.ContainsKey(record.name))
+                    {
+                        //User not added to dictionary yet, add them
+                        _processedTrainings.Add(record.name, new Dictionary<string, Training>());
+                    }
+                    //Loop through each training and add if not yet in dictionary, and replace with most recent if so,
+                    //  and add to _trainings.
+                    foreach(var training in record.completions)
+                    {
+                        //dictionary processing
+                        if (_processedTrainings[record.name].ContainsKey(training.name))
+                        {
+                            //Training already added, replace if current is more recent
+                            if (DateTime.Parse(training.timestamp) > DateTime.Parse( _processedTrainings[record.name][training.name].timestamp) )
+                            {
+                                _processedTrainings[record.name][training.name] = training;
+                            }
+                        }
+                        else
+                        {
+                            //New Training, add to dictionary
+                            _processedTrainings[record.name].Add(training.name, training);
+                        }
+                        //_trainings processing
+                        _trainings.Add(training.name);
+                    }
+                }
             }
             catch (Exception ex) 
             {
@@ -68,6 +107,20 @@ namespace AppDev_Round1
                 return false;
             }
             return true;
+        }
+
+        private void updateTrainingList()
+        {
+            trainings.Items.Clear();
+            var uniqueTrainings = _trainings
+                .OrderBy(x => x)
+                .Distinct()
+            ;
+            foreach( var training in uniqueTrainings )
+            {
+                trainings.Items.Add(training);
+            }
+            _trainings = uniqueTrainings.ToList();
         }
 
         private void openJSONFile_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
