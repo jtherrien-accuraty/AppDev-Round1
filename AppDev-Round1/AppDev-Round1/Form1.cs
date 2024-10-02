@@ -230,6 +230,47 @@ namespace AppDev_Round1
             outputPreview.Text = "Process Training Reports Selected";
         }
 
+        private void ProcessExpiredTrainings()
+        {
+            Dictionary<string, Dictionary<string, string>> results = new Dictionary<string, Dictionary<string, string>>();
+            foreach (var trainingStr in _trainings)
+            {
+                var users = _processedTrainings
+                    .Where(x => 
+                        x.Value.ContainsKey(trainingStr)
+                        && x.Value[trainingStr].expires != null 
+                        && DateTime.Parse(x.Value[trainingStr].expires) < expiredTraining.Value.AddMonths(1)
+                    )
+                ;
+                //results.Add(trainingStr, new List<string>());
+                foreach(var user in users)
+                {
+                    //if user is not already in dictionary add them
+                    if (!results.ContainsKey(user.Key))
+                    {
+                        results.Add(user.Key, new Dictionary<string, string>());
+                    }
+
+                    //if user expired list doesn't already have the training add it
+                    if (!results[user.Key].ContainsKey(trainingStr))
+                    {
+                        string exp = string.Empty;
+                            
+                        if ( DateTime.Parse(user.Value[trainingStr].expires) < expiredTraining.Value)
+                        {
+                            exp = "expired";
+                        }
+                        else
+                        {
+                            exp = "expires soon";
+                        }
+                        results[user.Key].Add(trainingStr, exp);
+                    }
+                }
+            }
+            outputPreview.Text = JsonSerializer.Serialize(results);
+        }
+
         private void updateOutput_Click(object sender, EventArgs e)
         {
             switch (outputType.SelectedItem)
@@ -241,7 +282,7 @@ namespace AppDev_Round1
                     ProcessTrainingReports();
                     break;
                 case "Expired Trainings":
-                    ExpiredTrainingsSelected();
+                    ProcessExpiredTrainings();
                     break;
                 default:
                     updateOutput.Enabled = false;
